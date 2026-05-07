@@ -7,10 +7,7 @@ import Notes from '../components/Notes'
 import { AD_ACCOUNTS } from '../lib/accounts'
 
 const RANGES = [
-  { label: 'Aaj', value: '1' },
-  { label: '7 Din', value: '7' },
-  { label: '30 Din', value: '30' },
-  { label: 'Sab', value: '0' },
+  { label: 'Yesterday', value: '1' },
 ]
 
 function fmtPKR(v) {
@@ -38,7 +35,7 @@ function Skeleton() {
 
 export default function Dashboard() {
   const [account, setAccount] = useState(AD_ACCOUNTS[0])
-  const [range, setRange] = useState('7')
+  const [range, setRange] = useState('1')
   const [data, setData] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
