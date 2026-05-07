@@ -4,23 +4,15 @@ import { AD_ACCOUNTS } from '../../lib/accounts'
 
 export default async function handler(req, res) {
   const { accountId, range = '7' } = req.query
-  
   const account = AD_ACCOUNTS.find(a => a.id === accountId)
-  
-  if (!account) {
-    return res.status(404).json({ error: `Account not found: ${accountId}`, available: AD_ACCOUNTS.map(a => a.id) })
-  }
-
-  if (!account.pubUrl) {
-    return res.status(500).json({ error: `pubUrl missing for account: ${accountId}` })
-  }
+  if (!account) return res.status(404).json({ error: 'Account not found' })
 
   try {
     const allRows = await fetchSheetData(account.pubUrl)
     const days = parseInt(range)
     const filtered = days === 0 ? allRows : getDateRange(allRows, days)
 
-    res.setHeader('Cache-Control', 'no-store')
+    res.setHeader('Cache-Control', 's-maxage=300, stale-while-revalidate=600')
     res.json({
       summary: aggregateData(filtered),
       byDate: groupByDate(filtered),
